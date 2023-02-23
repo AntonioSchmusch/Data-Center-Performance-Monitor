@@ -1,0 +1,18 @@
+                                                   first_rules.yml                                                                     
+groups:
+  - name: server
+    rules:
+    - record: betabeta_cpu_auslastung_prozent_average_by_instance_test_1
+      expr: avg by (instance) (rate(node_cpu_seconds_total{mode!="idle"}[1h])*100)
+    - record: betabeta_cpu_auslastung_prozent_sum_by_instance_test_2
+      expr: ((sum by (instance) (rate(node_cpu_seconds_total{mode!="idle"}[1h]))) / (sum by (instance) (rate(node_cpu_seconds_total[1h]))))*100 
+  - name: speichersysteme
+    rules:
+    - record: betabeta_lese_schreib_volumen_gigabyte_average_by_instance_test_1
+      expr: avg by (instance) (rate(node_disk_read_bytes_total[1h]) + rate(node_disk_written_bytes_total[1h])) * 9.31e-10
+    - record: betabeta_speicherauslastung_terabyte_sum_by_instance_test_1
+      expr: sum by (instance) (node_filesystem_size_bytes - min_over_time(node_filesystem_free_bytes[1d])) * 1E-12
+  - name: netzwerk
+    rules:
+    - record: betabeta_uebertragene_datenmenge_gigabyte_sum_by_instance_test_1
+      expr: sum by (instance) (rate(node_network_transmit_bytes_total[1h]) + rate(node_network_receive_bytes_total[1h])) * 9.31e-10
