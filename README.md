@@ -33,6 +33,37 @@ Für bestimmte Berechnungen werden Sie eventuell folgende Daten benötigen:
 irgendwelche coolen Konsolenbefehle vielleicht?
 ```
 
+## Node_Exporter Metriken finden und auswählen
+
+Ist Node_Exporter einmal installiert, so liefert es permanent Messdaten seines Hosts. Über die Konsole (Bash, Powershell, Command-Line) eines Servers auf dem Prometheus installiert und mit Node_Exporter verbunden ist, lässt sich mit dem Befehl
+
+``` curl http://localhost:9100/metrics ```
+
+eine Liste ausgeben, die alle Metriken enthält, die von Node_Exporter angeboten werden. # HELP erläutert kurz die Metrik, nach #TYPE folgt der Name der Metrik sowie der Datentyp (z.B. counter). Dananch folgen die Metriken und aktuell ermittelte Werte, da Prometheus permanent misst. Bei einigen Metriken werden auch verschiedene Modi angezeigt, bspw. die verschiedenen Modi, in denen sich ein CPU befinden kann. 
+
+Auszug aus der Liste der Metriken:
+
+```
+    # HELP node_cpu_seconds_total Seconds the CPUs spent in each mode.
+    # TYPE node_cpu_seconds_total counter
+    node_cpu_seconds_total{cpu="0",mode="idle"} 4.19954657e+06
+    node_cpu_seconds_total{cpu="0",mode="iowait"} 1306.24
+    node_cpu_seconds_total{cpu="0",mode="irq"} 0
+    node_cpu_seconds_total{cpu="0",mode="nice"} 3.06237605e+06
+    node_cpu_seconds_total{cpu="0",mode="softirq"} 126.9
+    node_cpu_seconds_total{cpu="0",mode="steal"} 0
+    node_cpu_seconds_total{cpu="0",mode="system"} 19429.74
+    node_cpu_seconds_total{cpu="0",mode="user"} 208544.95
+    # HELP node_filesystem_free_bytes Filesystem free space in bytes.
+    # TYPE node_filesystem_free_bytes gauge
+    node_filesystem_free_bytes{device="/dev/mapper/ubuntu--vg-ubuntu--lv",fstype="ext4",mountpoint="/"} 9.0620461056e+10
+    node_filesystem_free_bytes{device="/dev/sda1",fstype="vfat",mountpoint="/boot/efi"} 1.119490048e+09
+    # HELP node_network_transmit_bytes_total Network device statistic transmit_bytes.
+    # TYPE node_network_transmit_bytes_total counter
+    node_network_transmit_bytes_total{device="eno1"} 4.665219706e+09
+    node_network_transmit_bytes_total{device="eno2"} 4.0108397e+07
+```
+
 ## Konfiguration
 
 Prometheus ist sehr gut dokumentiert. Die meisten Fragen zu Konfiguration, Installation werden hier beantwortet.
@@ -43,11 +74,13 @@ Prometheus ist sehr gut dokumentiert. Die meisten Fragen zu Konfiguration, Insta
 
 (Alphalpha bitte ? wo in der Config Datei hatten wir die 500 Tage eingestellt?)
 
+
 ## Beispiel für prometheus.yml-Datei
 
 Die prometheus.yml ist standardmäßig vorhanden und kann konfiguriert werden. Hier wird definiert, welche "targets" gescraped werden sollen und in welchem Abstand. Unter "rules" ist ein Verweis auf Berechnungsvorschriften, falls vorhanden, hinterlegt. Außerdem können Metriken benannt werden, die behalten (keep) oder nicht behalten (drop) werden sollen um die Datensparsamkeit zu fördern.
 
 Unter "files" ist eine vollständige prometheus.yml-Datei des Uni-Projekts vorhanden. Nachfolgend ein Auszug aus prometheus.yml mit 60 Sekunden Scrape Intervall und dem Verweis auf die rules-Datei "first_rules.yml".
+
 ```
 # Sample config for Prometheus.
 
@@ -70,11 +103,7 @@ alerting:
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
   - "first_rules.yml"
-
-
 ```
-
-
 
 
 ## Beispiel für Berechnungsvorschriften
@@ -90,6 +119,7 @@ Im Beispiel wird berechnet:
 Es bietet sich an die "records" so zu benennen, dass ersichtlich ist, welche Berechnung dahinter steckt.
 
 first_rules.yml
+
 ```
 groups:
   - name: Server
