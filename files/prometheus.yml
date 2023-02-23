@@ -43,12 +43,5 @@ scrape_configs:
       - targets: ['localhost:9100']
     metric_relabel_configs:
     - source_labels: [__name__]
-      regex: '(node_cpu_seconds_total|node_network_transmit_bytes_total|node_network_receive_bytes_total|node_disk_read_bytes_total|node_disk_written_bytes_t>
+      regex: '(node_cpu_seconds_total|node_network_transmit_bytes_total|node_network_receive_bytes_total|node_disk_read_bytes_total|node_disk_written_bytes_total|node_filesystem_size_bytes|node_filesystem_free_bytes|node_filesystem_avail_bytes)'
       action: keep
-
-	  
-	  
-	  
-	  
-	  
-	  
