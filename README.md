@@ -7,13 +7,13 @@ Wir erheben keinen Anspruch auf Vollständigkeit und sind offen für Ergänzunge
 
 ## Grundsätzliche Fragen beantworten
 
-- Haben Sie die nötigen Zugänge zu den Komponenten im Rechenzentrum?
-- Wie ist Ihr Rechenzentrum strukturiert?
+- Sind die nötigen Zugänge zu den Komponenten im Rechenzentrum zugänglich?
+- Wie ist das Rechenzentrum strukturiert?
 - Was soll überwacht werden?
 - Welche Daten sollen gespeichert werden und wie lange?
 - Welche Berechnungen sollen ausgeführt werden?
 
-Für bestimmte Berechnungen werden Sie eventuell folgende Daten benötigen:
+Für bestimmte Berechnungen werden eventuell folgende Daten benötigt:
 - Gesamtstromverbrauch des Rechenzentrums oder der Server
 - die Elektrische Leistungsaufnahme von: Server, Netzwerk und Speicher
 
