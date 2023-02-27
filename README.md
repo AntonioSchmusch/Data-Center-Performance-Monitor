@@ -97,6 +97,34 @@ Aufräumen:
 ```
 rm -rf node_exporter-1.0.1.linux-amd64.tar.gz node_exporter-files
 ```
+
+Installation Grafana:
+```
+sudo apt-get install -y apt-transport-https
+sudo apt-get install -y software-properties-common wget
+sudo wget -q -O /usr/share/keyrings/grafana.key https://apt.grafana.com/gpg.key
+```
+Repository hinzufügen:
+```
+echo "deb [signed-by=/usr/share/keyrings/grafana.key] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+```
+Installation:
+```
+sudo apt-get update
+sudo apt-get install grafana
+```
+Start Service:
+```
+sudo systemctl daemon-reload
+sudo systemctl start grafana-server
+sudo systemctl status grafana-server
+```
+Grafana mit Systemstart starten:
+```
+sudo systemctl enable grafana-server.service
+```
+
+
 ## Node_Exporter Metriken finden und auswählen
 
 Ist Node_Exporter einmal installiert, so liefert es permanent Messdaten seines Hosts. Über die Konsole (Bash, Powershell, Command-Line) eines Servers auf dem Prometheus installiert und mit Node_Exporter verbunden ist, lässt sich mit dem Befehl
