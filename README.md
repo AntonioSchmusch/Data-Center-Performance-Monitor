@@ -27,12 +27,76 @@ Für bestimmte Berechnungen werden eventuell folgende Daten benötigt:
 
 ## Installation der Tools, wo genau installiert man Node, Prom, Graf?
 
-(Antonio bitte)
+Das Monitoring wird auf einer VM eingerichtet, von welcher aus die einzelnen Targets über das Netzwerk erreichbar sind. Targets können hierbei einzelne Server, aber auch z.B. Strommessgeräte sein. Auf den Servern ist die Installation von Node-Exporter nötig, um die Daten zu erheben.
+
+Auf der Monitoring-VM werden die Tools Prometheus, Grafana und eventuell ein MQTT-Broker installiert. Prometheus greift dabei die einzelnen Daten der Targets ab und speichert diese. Der Stromverbrauch lässt sich von den einzelnen Messgeräten über einen MQTT-Broker erfassen und in eine Datenbank speichern.
+
+Installation Node_Expoerter:
+Download:
+```
+wget \https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
+```
+Node-Exporter User und Verzeichnisse erstellen:
+```
+sudo groupadd -f node_exporter
+sudo useradd -g node_exporter --no-create-home --shell /bin/false node_exporter
+sudo mkdir /etc/node_exporter
+sudo chown node_exporter:node_exporter /etc/node_exporter
+```
+Entpacken:
+```
+tar -xvf node_exporter-1.0.1.linux-amd64.tar.gz
+mv node_exporter-1.0.1.linux-amd64 node_exporter-files
+```
+Installation:
+```
+sudo cp node_exporter-files/node_exporter /usr/bin/
+sudo chown node_exporter:node_exporter /usr/bin/node_exporter
+```
+Setup Node-Expoerter:
+```
+sudo nano /usr/lib/systemd/system/node_exporter.service
+```
+Beispielkonfiguration:
+```
+[Unit]
+Description=Node Exporter
+Documentation=https://prometheus.io/docs/guides/node-exporter/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+Restart=on-failure
+ExecStart=/usr/bin/node_exporter \
+  --web.listen-address=:9200
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+sudo chmod 664 /usr/lib/systemd/system/node_exporter.service
+```
+System neu starten und Node-Exporter starten:
+```
+sudo systemctl daemon-reload
+sudo systemctl start node_exporter
+```
+Status überprüfen:
 
 ```
-irgendwelche coolen Konsolenbefehle vielleicht?
+sudo systemctl status node_exporter
 ```
-
+Node-Exporter mit Systemstart starten:
+```
+sudo systemctl enable node_exporter.service
+```
+Aufräumen:
+```
+rm -rf node_exporter-1.0.1.linux-amd64.tar.gz node_exporter-files
+```
 ## Node_Exporter Metriken finden und auswählen
 
 Ist Node_Exporter einmal installiert, so liefert es permanent Messdaten seines Hosts. Über die Konsole (Bash, Powershell, Command-Line) eines Servers auf dem Prometheus installiert und mit Node_Exporter verbunden ist, lässt sich mit dem Befehl
