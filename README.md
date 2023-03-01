@@ -162,10 +162,15 @@ Prometheus ist sehr gut dokumentiert. Die meisten Fragen zu Konfiguration, Insta
 - [ ] [Prometheus documentation](https://prometheus.io/docs/prometheus/latest/getting_started/)
 
 
-## Festlegung der Monitoring-Dauer (Aufbewahrung)
+## Festlegung der Monitoring-Dauer
 
-(Alphalpha bitte ? wo in der Config Datei hatten wir die 500 Tage eingestellt?)
+Standardmäßig speichert Prometheus Daten für 15 Tage. Diese sogenannte Retention-Time lässt sich ändern, allerdings sollte lokal genügend Speicherplatz eingeplant werden. Es gibt außerdem die Möglichkeit extern zu speichern.
 
+Änderung der Retention-Time über Argumenteintrag in:
+```/etc/default/prometheus```
+
+Beispiel-Konfiguration auf 500 Tage:
+```ARGS="--storage.tsdb.retention.time=500d"``` 
 
 ## Beispiel für prometheus.yml-Datei
 
